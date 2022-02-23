@@ -1,0 +1,16 @@
+{% extends 'navigator.html' %}
+
+{% block navigator %}
+
+    <div style="margin: 1rem 1rem">
+        <a>
+            LG Project
+        </a>
+
+        <a href="{% url 'uploadapp:upload' %}" methods="GET">
+            업로드!!!
+        </a>
+    </div>
+
+
+{%  endblock %}
