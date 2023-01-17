@@ -1,32 +1,89 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
 
-{% block content %}
+<div style="text-align: center; margin-top: 3rem">
+  <form method="get">
+    {% csrf_token %}
+    <select
+      name="category_product"
+      style="
+        display: inline-block;
+        width: 8rem;
+        height: 1.9rem;
+        font-family: 'Nanum Gothic Coding', monospace;
+        font-weight: 200;
+        margin-left: 0.3rem;
+      "
+    >
+      <option value="cleaner">청소기</option>
+      <option value="refrigerator">냉장고</option>
+      <option value="dish_washer">식기세척기</option>
+    </select>
+    <input type="submit" value="확인" />
+  </form>
+  {% if category_product %}
+  <h4>"제품: {{ category_product }}"</h4>
+  {% endif %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+  <div>
+    <div style="margin-top: 4rem">
+      <div id="name-group" style="margin-top: 1rem">
+        {% if result_name %} {% for name in result_name %}
+        <h5 style="position: absolute; top: -9999px; overflow: hidden">
+          - ID) {{ name }}
+        </h5>
 
-    <div style="text-align: center; margin-top: 3rem;">
-        <form method="get">
-        {% csrf_token %}
-            <select name='category_product' style="display: inline-block; width: 8rem; height: 1.9rem;
-                                    font-family: 'Nanum Gothic Coding', monospace; font-weight: 200; margin-left: 0.3rem;">
-                    <option value='cleaner'>청소기</option>
-                    <option value='refrigerator'>냉장고</option>
-                    <option value='dish_washer'>식기세척기</option>
-            </select>
-            <input type="submit" value="확인">
-        </form>
-        <div>
-        <div style="margin-top: 4rem;">
-        {% if category_product %}
-                <h4> "제품: {{ category_product }}" </h4>
-        {% endif %}
-        <div style="margin-top: 1rem;">
-        {% if result %}
-            {% for name, count in result %}
-                    <h5>- ID) {{ name }} : {{ count }}개</h5>
-
-            {% endfor %}
-        {% endif %}
-        </div>
-        </div>
+        {% endfor %} {% endif %}
+      </div>
     </div>
+  </div>
+  <div>
+    <div style="margin-top: 4rem">
+      <div id="count-group" style="margin-top: 1rem">
+        {% if result_count %} {% for count in result_count %}
+        <h5 style="position: absolute; top: -9999px; overflow: hidden">
+          {{ count }}
+        </h5>
+        {% endfor %} {% endif %}
+      </div>
+    </div>
+  </div>
+  <div>
+    <canvas id="myChart"></canvas>
+  </div>
+  <script>
+    const name = document.getElementById("name-group");
+    const names = name.innerText;
+    const nameArray = names.split("\n");
 
-{% endblock %}
+    const count = document.getElementById("count-group");
+    const counts = count.innerText;
+    const countArray = counts.split("\n");
+
+    console.log(countArray);
+    const ctx = document.getElementById("myChart");
+
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: nameArray,
+        datasets: [
+          {
+            label: "# of Votes",
+            data: countArray,
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        indexAxis: "y",
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  </script>
+
+  {% endblock %}
+</div>

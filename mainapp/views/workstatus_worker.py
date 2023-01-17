@@ -16,7 +16,9 @@ def workstatus_worker(request):
             temp_count = Review.objects.filter(category_product=category_product, labeled_user_id=int(i.pk)).count()
             result_name.append(i.username)
             result_count.append(temp_count)
-        result = zip(result_name, result_count)
-        context = {'result': result, 'category_product': category_product}
-
+        result_name = result_name
+        result_count = result_count
+        #result = zip(result_name, result_count)
+        context = {'result_name': result_name, 'result_count':result_count, 'category_product': category_product}
+        
     return render(request, 'mainapp/workstatus_count.html', context=context)
